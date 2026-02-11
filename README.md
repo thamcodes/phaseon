@@ -113,6 +113,13 @@ This repository currently contains the software and hardware foundations for the
 
 ---
 
+## 📄 License
+
+This project is proprietary and owned by Thammanna Sampras, Vishal KL, Prerna Balaji, Sai Niharika A, ITIE Knowledge Solutions Pvt. Ltd..
+All rights reserved.
+
+---
+
 ## 👥 Authors
 1. Thammanna Sampras
 2. Vishal KL
