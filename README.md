@@ -11,7 +11,7 @@ A real-time EEG-driven prosthetic arm control system
 >Phaseon is currently under active development. The system architecture and results will evolve as each phase is completed. <br>
 >This project is being carried under ITIE Knowledge Solutions Pvt. Ltd.
 
-## 🧠 About Phaseon
+### 🧠 About Phaseon
 
 **Phaseon** is an ongoing research and engineering project that focuses on building a  
 **real-time EEG-controlled 3D-printed prosthetic arm** for basic hand interaction.
@@ -28,7 +28,7 @@ This project primarily aims to explore:
 
 ---
 
-## 🤖 Hardware
+### 🤖 Hardware
 
 The mechanical structure of the prosthetic hand is based on the  
 **InMoov Right Hand open-source design**.
@@ -39,7 +39,7 @@ The mechanical structure of the prosthetic hand is based on the
 
 ---
 
-## ⚡ Electronics & Circuit
+### ⚡ Electronics & Circuit
 
 The prosthetic arm is driven using the following main components:
 
@@ -53,7 +53,7 @@ microcontroller load minimal.
 
 ---
 
-## 🧩 System Overview
+### 🧩 System Overview
 
 The Phaseon system follows a closed-loop real-time control pipeline:
 
@@ -66,7 +66,7 @@ The Phaseon system follows a closed-loop real-time control pipeline:
 
 ---
 
-## ⏳ Project Phases
+### ⏳ Project Phases
 
 The project is developed in structured phases.
 
@@ -85,7 +85,7 @@ Future phases will integrate classification and closed-loop prosthetic control.
 
 ---
 
-## 🔭 Planned Phases
+### 🔭 Planned Phases
 
 - Real-time EEG feature extraction and dataset creation
 - Machine learning model for grip / release intent detection
@@ -94,7 +94,7 @@ Future phases will integrate classification and closed-loop prosthetic control.
 
 ---
 
-## 🛠️ Tech Stack
+### 🛠️ Tech Stack
 
 - Python (signal processing, visualization, GUI, ML)
 - PyQt / PyQtGraph (real-time interface and plots)
@@ -103,21 +103,21 @@ Future phases will integrate classification and closed-loop prosthetic control.
 
 ---
 
-## 📌 Project Status
+### 📌 Project Status
 
 🚧 Actively under development  
 This repository currently contains the software and hardware foundations for the Phase 1 pipeline.
 
 ---
 
-## 📄 License
+### 📄 License
 
 This project is proprietary and owned by Thammanna Sampras, Vishal KL, Prerna Balaji, Sai Niharika A, ITIE Knowledge Solutions Pvt. Ltd..
 All rights reserved.
 
 ---
 
-## 👥 Authors
+### 👥 Authors
 1. Thammanna Sampras
 2. Vishal KL
 3. Prerna Balaji
