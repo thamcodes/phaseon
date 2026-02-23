@@ -457,7 +457,7 @@ class PhaseonDashboard(QMainWindow):
                 self.lbl_end.setText(f"End: {end_time.strftime('%H:%M:%S')}")
                 self.recording_start = None
 
-    # Update Clocl Constructor
+    # Update Clock Constructor
     def update_clock(self):
         if self.recording_start:
             elapsed = datetime.now() - self.recording_start
