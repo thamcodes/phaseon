@@ -185,6 +185,10 @@ class PhaseonDashboard(QMainWindow):
     def __init__(self):
         super().__init__()
 
+        # Arduino Initialization
+        self.arduino_serial = None
+        self.arduino_port = 'COM3'
+
         # Window Settings
         self.setWindowTitle("Phaseon - Interface")
         self.resize(1280, 850)
@@ -465,8 +469,33 @@ class PhaseonDashboard(QMainWindow):
         if self.btn_arduino.isChecked():
             self.btn_arduino.setText("Disconnect")
             self.arduino_badge.setText(" ● Connecting... ")
-            self.arduino_badge.setStyleSheet(f"background-color: #FEF3C7; color: #D97706; border-radius: 15px; padding: 5px 15px; font-weight: bold;")
+            self.arduino_badge.setStyleSheet("background-color: #FEF3C7; color: #D97706; border-radius: 15px; padding: 5px 15px; font-weight: bold;")
+            
+            QApplication.processEvents() 
+
+            try:
+                import serial
+                import time
+                
+                self.arduino_serial = serial.Serial('COM3', 9600, timeout=1)
+                time.sleep(2)
+                
+                print("Successfully connected!")
+                self.arduino_badge.setText(" ● Arduino Connected ")
+                self.arduino_badge.setStyleSheet("background-color: #D1FAE5; color: #059669; border-radius: 15px; padding: 5px 15px; font-weight: bold;")
+
+            except Exception as e:
+                print(f"Connection Error: {e}")
+                self.btn_arduino.setChecked(False)
+                self.btn_arduino.setText("Connect Arduino")
+                self.arduino_badge.setText(" ● Connection Failed ")
+                self.arduino_badge.setStyleSheet(f"background-color: #FEE2E2; color: {accent_red_color}; border-radius: 15px; padding: 5px 15px; font-weight: bold;")
+
         else:
+            if hasattr(self, 'arduino_serial') and self.arduino_serial:
+                self.arduino_serial.close()
+                self.arduino_serial = None
+                
             self.btn_arduino.setText("Connect Arduino")
             self.arduino_badge.setText(" ● Arduino Disconnected ")
             self.arduino_badge.setStyleSheet(f"background-color: #FEE2E2; color: {accent_red_color}; border-radius: 15px; padding: 5px 15px; font-weight: bold;")
@@ -494,6 +523,15 @@ class PhaseonDashboard(QMainWindow):
             seconds = int(elapsed.total_seconds())
             h, m, s = seconds // 3600, (seconds % 3600) // 60, seconds % 60
             self.lbl_timer.setText(f"{h:02}:{m:02}:{s:02}")
+
+    # Update graphs
+    def update_graphs(self, data):
+        n_new = data.shape[1]
+        self.raw_buffer = np.roll(self.raw_buffer, -n_new, axis=1)
+        self.raw_buffer[:, -n_new:] = data
+        
+        for i in range(4):
+            self.curves[i].setData(self.raw_buffer[i])
 
 # End Point
 if __name__ == "__main__":
