@@ -3,7 +3,7 @@ import sys
 import numpy as np
 import pyqtgraph as pg
 from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, 
-                             QFrame, QGraphicsDropShadowEffect)
+                             QFrame, QGraphicsDropShadowEffect, QGridLayout)
 from PyQt6.QtCore import Qt, QTimer, QRectF
 from PyQt6.QtGui import QFont, QColor, QPainter, QPen
 from datetime import datetime
@@ -263,6 +263,36 @@ class PhaseonDashboard(QMainWindow):
         self.btn_baseline.clicked.connect(lambda: self.start_calibration("Baseline"))
         layout.addWidget(self.btn_baseline)
 
+        # Resistances
+        layout.addSpacing(20)
+        quality_label = QLabel("Resistance")
+        quality_label.setStyleSheet(f"color: {text_dark_color}; font-size: 14px")
+        layout.addWidget(quality_label)
+
+            # Container for the 4 channel indicators
+        quality_container = QFrame()
+        quality_container.setStyleSheet("border: none; border-radius: 10px; padding: 5px;")
+        q_layout = QGridLayout(quality_container)
+       
+        self.quality_leds = {}
+        channels = [('O1', 0, 0), ('O2', 0, 1), ('T3', 1, 0), ('T4', 1, 1)]
+       
+            # Matrix and Style
+        for ch, row, col in channels:
+            v_box = QVBoxLayout()
+            led = QLabel()
+            led.setFixedSize(14, 14)
+            led.setStyleSheet("background-color: #D1D5DB; border-radius: 7px; border: 1px solid #9CA3AF;")
+            lbl = QLabel(ch)
+            lbl.setStyleSheet("font-size: 10px; color: {text_light_color}; font-weight: normal; margin-top: 0px;")
+            lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            v_box.addWidget(led, alignment=Qt.AlignmentFlag.AlignCenter)
+            v_box.addWidget(lbl, alignment=Qt.AlignmentFlag.AlignCenter)
+            q_layout.addLayout(v_box, row, col)
+            self.quality_leds[ch] = led
+        layout.addWidget(quality_container)
+        self.lbl_resistance = QLabel()
+        
         layout.addStretch()
         self.main_layout.addWidget(sidebar) 
 
@@ -457,7 +487,7 @@ class PhaseonDashboard(QMainWindow):
                 self.lbl_end.setText(f"End: {end_time.strftime('%H:%M:%S')}")
                 self.recording_start = None
 
-    # Update Clocl Constructor
+    # Update Clock Constructor
     def update_clock(self):
         if self.recording_start:
             elapsed = datetime.now() - self.recording_start
