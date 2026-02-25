@@ -246,13 +246,13 @@ class PhaseonDashboard(QMainWindow):
         # Connect/Disconnect Device Button
         self.btn_connect = QPushButton("Connect Device")
         self.btn_connect.setCheckable(True)
-        self.btn_connect.clicked.connect(self.toggle_connection)
+        self.btn_connect.clicked.connect(self.toggle_device)
         layout.addWidget(self.btn_connect)
 
         # Connect/Disconnect Arduino Button
         self.btn_arduino = QPushButton("Connect Arduino")
         self.btn_arduino.setCheckable(True)
-        self.btn_arduino.clicked.connect(self.toggle_connection)
+        self.btn_arduino.clicked.connect(self.toggle_arduino)
         layout.addWidget(self.btn_arduino)
 
         # IAPF Calibratin Button
@@ -455,17 +455,17 @@ class PhaseonDashboard(QMainWindow):
         self.btn_iapf.setChecked(False)
         self.btn_baseline.setChecked(False)
 
-    # Toggle Connection Constructor
-    def toggle_connection(self):
+    # Toggle Device Method
+    def toggle_device(self):
         if self.btn_connect.isChecked():
             self.btn_connect.setText("Disconnect")
-            self.device_badge.setText(" ● Connecting... ")
-            self.device_badge.setStyleSheet(f"background-color: #FEF3C7; color: #D97706; border-radius: 15px; padding: 5px 15px; font-weight: bold;")
+            QTimer.singleShot(0, self.brain_worker.start_connection)
         else:
             self.btn_connect.setText("Connect Device")
-            self.device_badge.setText(" ● Device Disconnected ")
-            self.device_badge.setStyleSheet(f"background-color: #FEE2E2; color: {accent_red_color}; border-radius: 15px; padding: 5px 15px; font-weight: bold;")
+            self.brain_worker.stop_stream()
         
+    # Toggle Arduino Method
+    def toggle_arduino(self):
         if self.btn_arduino.isChecked():
             self.btn_arduino.setText("Disconnect")
             self.arduino_badge.setText(" ● Connecting... ")
@@ -500,6 +500,20 @@ class PhaseonDashboard(QMainWindow):
             self.arduino_badge.setText(" ● Arduino Disconnected ")
             self.arduino_badge.setStyleSheet(f"background-color: #FEE2E2; color: {accent_red_color}; border-radius: 15px; padding: 5px 15px; font-weight: bold;")
        
+        if self.btn_arduino.isChecked():
+            try:
+                if not hasattr(self, 'arduino_serial') or self.arduino_serial is None:
+                    self.arduino_serial = serial.Serial('COM3', 9600, timeout=1)
+                    self.arduino_badge.setText(" ● Arduino Connected ")
+                    self.arduino_badge.setStyleSheet("background-color: #D1FAE5; color: #059669; border-radius: 15px; padding: 5px 15px; font-weight: bold;")
+            except Exception as e:
+                print(f"Arduino Error: {e}")
+        else:
+            if hasattr(self, 'arduino_serial') and self.arduino_serial:
+                self.arduino_serial.close()
+                self.arduino_serial = None
+        self.btn_arduino.setText("Connect Arduino")
+
     # Toggle Record Constructor
     def toggle_record(self):
         if self.btn_record.isChecked():
